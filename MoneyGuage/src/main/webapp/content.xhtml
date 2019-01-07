@@ -1,0 +1,159 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:common="http://java.sun.com/jsf/composite/components/common">
+
+
+	<!-- Page Header -->
+	<header class="masthead"
+		style="background-image: url(/img/investing.jpg);">
+		<div class="overlay"></div>
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-8 col-md-10 mx-auto">
+					<div class="site-heading">
+						<h1>MoneyGauge</h1>
+						<br /> <span class="subheading">Investing Made Easy</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</header>
+
+	<!-- Main Content -->
+	<center>
+		<h1>Why choose MoneyGauge?</h1>
+		<br />
+		<h4 class="text-center font-weight-light ml-5 mr-5 mb-4">We get
+			it. Investing is scary, frightening, intimidating--especially if
+			you've never done it before. MoneyGauge looks to make that first step
+			into the investing world as easy as possible. With our easy-to-use
+			interface and useful charts and graphs, you'll be buying your first
+			stock in no time!</h4>
+		<br />
+
+		<div class="col-10">
+			<div class="card userprofile-card userprofile-card">
+				<div class="card-body overflow text-center">
+					<table class="table table-striped table-borderless table-hover" style="text-align: center;">
+						<thead class="thead-dark">
+							<tr>
+								<th scope="col">Crypto Name</th>
+								<th scope="col">Symbol</th>
+								<th scope="col">Current Price</th>
+								<th scope="col">1 hr Change</th>
+								<th scope="col">24 hr Change</th>
+							</tr>
+						</thead>
+						<tbody>
+							<ui:repeat var="stock" value="#{currentMarketBean.webStock}">
+								<tr>
+									<td>#{stock.tickerName}</td>
+									<td>#{stock.symbol}</td>
+									<td>$ <h:outputText value="#{stock.currentPrice}">
+											<f:convertNumber pattern="#0.00" />
+										</h:outputText>
+									</td>
+									<td style="color: #{(stock.hrChange lt 0)? 'red' : 'green'}"><h:outputText
+											value="#{(stock.hrChange lt 0) ? -stock.hrChange : stock.hrChange}">
+											<f:convertNumber pattern="#0.00"  />
+										</h:outputText>%</td>
+									<td style="color: #{(stock.dayChange lt 0)? 'red' : 'green'}"><h:outputText value="#{(stock.dayChange lt 0) ? -stock.dayChange : stock.dayChange}">
+											<f:convertNumber pattern="#0.00" />
+										</h:outputText>%</td>
+								</tr>
+							</ui:repeat>
+						</tbody>
+					</table>
+					<!-- <table class="table table-striped">
+						<thead class="thead-dark">
+							<tr>
+								<th scope="col">#</th>
+								<th scope="col">First</th>
+								<th scope="col">Last</th>
+								<th scope="col">Handle</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<th scope="row">1</th>
+								<td>Mark</td>
+								<td>Otto</td>
+								<td>@mdo</td>
+							</tr>
+							<tr>
+								<th scope="row">2</th>
+								<td>Jacob</td>
+								<td>Thornton</td>
+								<td>@fat</td>
+							</tr>
+							<tr>
+								<th scope="row">3</th>
+								<td>Larry</td>
+								<td>the Bird</td>
+								<td>@twitter</td>
+							</tr>
+						</tbody>
+					</table> -->
+				</div>
+			</div>
+		</div>
+		<br />
+
+		<h2>Create your free account in 3 easy steps:</h2>
+	</center>
+
+	<div class="card-deck pt-3 mx-auto pb-5" style="width: 80%">
+
+		<div class="card userprofile-card border-primary">
+			<div class="card-body" style="padding: 0;">
+				<div class="card-title text-center">
+					<span class="bubbles1">&#9312;</span>
+				</div>
+				<p class="card-text text-center ml-1 mr-1 mt-0">Create an
+					account using the link in the top-right corner</p>
+			</div>
+		</div>
+
+
+		<div class="card userprofile-card border-primary">
+			<div class="card-body" style="padding: 0;">
+				<div class="card-title text-center">
+					<span class="bubbles2">&#9313;</span>
+				</div>
+				<p class="card-text text-center ml-1 mr-1 mt-0">Confirm your
+					account via E-mail and One-Time Password Authentication.</p>
+			</div>
+
+		</div>
+
+		<div class="card userprofile-card border-primary">
+			<div class="card-body" style="padding: 0;">
+				<div class="card-title text-center">
+					<span class="bubbles3">&#9314;</span>
+				</div>
+				<p class="card-text text-center ml-1 mr-1 mt-0">Sign-in with
+					your credentials!</p>
+			</div>
+
+		</div>
+	</div>
+	<div>
+		<ui:fragment rendered="#{demoBean.randomNumber eq 1}">
+			<a href="https://www.autotrader.com/"><img
+				src="/img/advertisement_1.jpg" class="advertisement1 pb-2"></img></a>
+		</ui:fragment>
+		<ui:fragment rendered="#{demoBean.randomNumber eq 2}">
+			<a href="www.vps-mart.com/rdp-hosting‎"><img
+				src="/img/advertisement_2.jpg" class="advertisement1 pb-2"></img></a>
+		</ui:fragment>
+		<ui:fragment rendered="#{demoBean.randomNumber eq 3}">
+			<a href="https://www.vonage.com/business/"><img
+				src="/img/advertisement_3.jpg" class="advertisement1 pb-2"></img></a>
+		</ui:fragment>
+	</div>
+
+</ui:composition>

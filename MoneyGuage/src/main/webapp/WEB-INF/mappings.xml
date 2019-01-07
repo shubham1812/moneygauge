@@ -1,0 +1,76 @@
+<pretty-config
+	xmlns="http://ocpsoft.org/schema/rewrite-config-prettyfaces"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://ocpsoft.org/schema/rewrite-config-prettyfaces
+                      http://ocpsoft.org/xml/ns/prettyfaces/rewrite-config-prettyfaces.xsd">
+
+
+	<url-mapping id="portfolio">
+		<pattern value="/" />
+		<view-id value="/home.xhtml" />
+		<action onPostback="false">#{marketController.setCurrentMarketBean('home')}</action>
+	</url-mapping>
+
+	<url-mapping id="home">
+		<pattern value="/home" />
+		<view-id value="/home.xhtml" />
+		<action onPostback="false">#{marketController.setCurrentMarketBean('home')}</action>
+	</url-mapping>
+	<url-mapping id="signin">
+		<pattern value="/signin" />
+		<view-id value="/signin.xhtml" />
+	</url-mapping>
+	<url-mapping id="registration">
+		<pattern value="/registration" />
+		<view-id value="/registration.xhtml" />
+	</url-mapping>
+	<url-mapping id="password-reset">
+		<pattern value="/password-reset" />
+		<view-id value="/password-reset.xhtml" />
+	</url-mapping>
+	<url-mapping id="graph">
+		<pattern value="/graph" />
+		<view-id value="/graph.xhtml" />
+	</url-mapping>
+	<url-mapping id="market">
+		<pattern value="/market" />
+		<view-id value="/market.xhtml" />
+	</url-mapping>
+	<url-mapping id="shop-cryptos">
+		<pattern value="/shop-cryptos" />
+		<view-id value="/shop-cryptos.xhtml" />
+		<action onPostback="false">#{marketController.setCurrentMarketBean('cryptos')}</action>
+	</url-mapping>
+	<url-mapping id="userProfile">
+		<pattern value="/userProfile" />
+		<view-id value="/userProfile.xhtml" />
+		<action onPostback="false">#{userProfileController.getUserProfile()}</action>
+	</url-mapping>
+	<url-mapping id="admin">
+		<pattern value="/admin" />
+		<view-id value="/admin.xhtml" />
+		<action onPostback="false">#{adminController.checkIfUserAdmin()}</action>
+	</url-mapping>
+	<url-mapping id="privacy-policy">
+		<pattern value="/privacy-policy" />
+		<view-id value="/privacy-policy.xhtml" />
+	</url-mapping>
+	<url-mapping id="terms-and-conditions">
+		<pattern value="/terms-and-conditions" />
+		<view-id value="/terms-and-conditions.xhtml" />
+	</url-mapping>
+
+	<url-mapping id="about-us">
+		<pattern value="/about-us" />
+		<view-id value="/about-us.xhtml" />
+	</url-mapping>
+	<url-mapping id="trollbox">
+		<pattern value="/trollbox" />
+		<view-id value="/trollbox.xhtml" />
+	</url-mapping>
+		<url-mapping id="analytics">
+		<pattern value="/analytics" />
+		<view-id value="/analytics.xhtml" />
+		<action onPostback="false">#{graphController.defaultCurrency()}</action>
+	</url-mapping>
+</pretty-config>

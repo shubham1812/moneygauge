@@ -1,0 +1,480 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core" template="/home.xhtml">
+
+
+	<ui:define name="content">
+		<div class="container">
+			<div class="col-5 mt-4">
+				<div class="card background-card">
+					<div class="card-body">
+						<h:form id="searchForm">
+							<p:inputText styleClass="form-control"
+								value="#{marketBean.webStock.symbol}"
+								style="max-width: 275px; display: inline-block;" id="stock"
+								placeholder="Search for stock"></p:inputText>
+							<p:commandButton
+								style="height: 45px; width: 110px; display: inline-block;"
+								action="#{graphController.searchCurrency()}" id="buyBtn"
+								styleClass="btn btn-success btn-block" value="Search"
+								update=":searchForm :graphForm :osciilatorForm">
+							</p:commandButton>
+						</h:form>
+					</div>
+				</div>
+			</div>
+			<h:form id="graphForm">
+				<div class="row align-items-center">
+					<div class="col-12">
+						<h2 class="text-center mt-3">Summary</h2>
+						<div id="container_1"
+							style="height: 450px; margin-bottom: -100px; margin-top: -100px;"></div>
+					</div>
+				</div>
+				<div class="row align-items-center">
+					<div class="col-6">
+						<h2 class="text-center mt-3">Oscillators</h2>
+						<div id="container_2"
+							style="height: 350px; margin-bottom: -100px; margin-top: -100px;"></div>
+					</div>
+					<div class="col-6">
+						<h2 class="text-center mt-3">Moving Averages</h2>
+						<div id="container_3"
+							style="height: 350px; margin-bottom: -100px; margin-top: -100px;"></div>
+					</div>
+
+				</div>
+			</h:form>
+		</div>
+		<h:form id="osciilatorForm">
+			<div class="container mt-4">
+				<div class="row mb-3">
+					<div class="col-6">
+						<div class="card background-card">
+							<div class="card-body">
+								<div class="input-group">
+									<div class="panel-heading">
+										<h3 id="Quantity">Oscillators:</h3>
+
+									</div>
+									<div class="panel-body">
+										<div class="col-7" style="display: inline-grid;">
+											<label class="font-weight-light pr-3 pt-2"
+												style="font-size: 15px;">Relative Strength Index
+												(14)</label> <label class="font-weight-light pr-3 pt-4 pb-2"
+												style="font-size: 15px;">Stochastic %K (14, 3, 3)</label> <label
+												class="font-weight-light pr-3 pt-4" style="font-size: 15px;">Average
+												Directional Index (14)</label> <label
+												class="font-weight-light pr-3 pt-4" style="font-size: 15px;">Awesome
+												Oscillator</label> <label class="font-weight-light pr-3 pt-4"
+												style="font-size: 15px;">Commodity Channel Index
+												(20):</label> <label class="font-weight-light pr-3 pt-4"
+												style="font-size: 15px;">Momentum(10)</label> <label
+												class="font-weight-light pr-3 pt-4" style="font-size: 15px;">MACD
+												Level (12, 26)</label> <label class="font-weight-light pr-3 pt-4"
+												style="font-size: 15px;">Stochastic RSI Fast (3, 3,
+												14, 14)</label> <label class="font-weight-light pr-3 pt-4"
+												style="font-size: 15px;">Williams Percent Range (14)</label>
+											<label class="font-weight-light pr-3 pt-4"
+												style="font-size: 15px;">Bull Bear Power</label> <label
+												class="font-weight-light pr-3 pt-4" style="font-size: 15px;">Ultimate
+												Oscillator (7, 14, 28)</label>
+										</div>
+										<div class="col-4" style="display: inline-grid;">
+											<fieldset>
+												<div class="mb-5">
+													<h:outputText
+														style="color: #{(graphBean.rsi14 eq 'BUY')? 'green' : 'red'}"
+														value="#{graphBean.rsi14}"></h:outputText>
+												</div>
+												<div class="mb-4">
+													<h:outputText
+														style="color: #{(graphBean.stochastic eq 'BUY')? 'green' : 'red'}"
+														value="#{graphBean.stochastic}"></h:outputText>
+												</div>
+												<div class="mb-5">
+													<h:outputText
+														style="color: #{(graphBean.averageDirectional eq 'BUY')? 'green' : 'red'}"
+														value="#{graphBean.averageDirectional}"></h:outputText>
+												</div>
+												<div class="mb-4 mt-1">
+													<h:outputText
+														style="color: #{(graphBean.awesomeOscillator eq 'BUY')? 'green' : 'red'}"
+														value="#{graphBean.awesomeOscillator}"></h:outputText>
+												</div>
+												<div class="mb-5 pt-2">
+													<h:outputText
+														style="color: #{(graphBean.commondityChannel eq 'BUY')? 'green' : 'red'}"
+														value="#{graphBean.commondityChannel}"></h:outputText>
+												</div>
+												<div class="mb-3">
+													<h:outputText
+														style="color: #{(graphBean.momentum eq 'BUY')? 'green' : 'red'}"
+														value="#{graphBean.momentum}"></h:outputText>
+												</div>
+												<div class="mb-3">
+													<h:outputText
+														style="color: #{(graphBean.macd eq 'BUY')? 'green' : 'red'}"
+														value="#{graphBean.macd}"></h:outputText>
+												</div>
+												<div class="mb-5 pt-1">
+													<h:outputText
+														style="color: #{(graphBean.bullBeaver eq 'BUY')? 'green' : 'red'}"
+														value="#{graphBean.bullBeaver}"></h:outputText>
+												</div>
+												<div class="mb-3 pt-3">
+													<h:outputText
+														style="color: #{(graphBean.williams eq 'BUY')? 'green' : 'red'}"
+														styleClass="mb-3" value="#{graphBean.williams}"></h:outputText>
+												</div>
+												<div class="mb-3 pt-4">
+													<h:outputText
+														style="color: #{(graphBean.stochastic eq 'BUY')? 'green' : 'red'}"
+														value="#{graphBean.bullBeaver}"></h:outputText>
+												</div>
+												<div class="mb-3 pt-1">
+													<h:outputText
+														style="color: #{(graphBean.stochastic eq 'BUY')? 'green' : 'red'}"
+														value="#{graphBean.ultimate}"></h:outputText>
+												</div>
+											</fieldset>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-6">
+						<div class="card background-card">
+							<div class="card-body mb-5">
+								<div class="input-group">
+									<div class="panel-heading">
+										<h3 id="movingaverage">Moving Averages:</h3>
+									</div>
+									<div class="panel-body">
+										<div class="col-7" style="display: inline-grid;">
+											<label class="font-weight-light pr-3 pt-2"
+												style="font-size: 15px;">Exponential Moving Average
+												(5)</label> <label class="font-weight-light pr-3 pt-4 pb-2"
+												style="font-size: 15px;">Simple Moving Average (5)</label> <label
+												class="font-weight-light pr-3 pt-2" style="font-size: 15px;">Exponential
+												Moving Average (10)</label> <label
+												class="font-weight-light pr-3 pt-4 pb-2"
+												style="font-size: 15px;">Simple Moving Average (10)</label>
+											<label class="font-weight-light pr-3 pt-2"
+												style="font-size: 15px;">Exponential Moving Average
+												(15)</label> <label class="font-weight-light pr-3 pt-4 pb-2"
+												style="font-size: 15px;">Simple Moving Average (15)</label>
+											<label class="font-weight-light pr-3 pt-2"
+												style="font-size: 15px;">Exponential Moving Average
+												(20)</label> <label class="font-weight-light pr-3 pt-4 pb-2"
+												style="font-size: 15px;">Simple Moving Average (20)</label>
+											<label class="font-weight-light pr-3 pt-4 pb-2"
+												style="font-size: 15px;">Ichimoku Cloud Base Line
+												(9, 26, 52, 26)</label> <label
+												class="font-weight-light pr-3 pt-4 pb-2"
+												style="font-size: 15px;"> Volume Weigted Moving
+												Average(20)</label> <label class="font-weight-light pr-3 pt-4"
+												style="font-size: 15px;">Hull Moving Average(20)</label>
+										</div>
+										<div class="col-4" style="display: inline-grid;">
+											<fieldset>
+												<div class="mb-5">
+													<h:outputText
+														style="color: #{(graphBean.exponentialMoving5 eq 'BUY')? 'green' : 'red'}"
+														value="#{graphBean.exponentialMoving5}"></h:outputText>
+												</div>
+												<div class="mb-3">
+													<h:outputText
+														style="color: #{(graphBean.simpleMoving5 eq 'BUY')? 'green' : 'red'}"
+														value="#{graphBean.simpleMoving5}"></h:outputText>
+												</div>
+												<div class="mb-5">
+													<h:outputText
+														style="color: #{(graphBean.exponentialMoving10 eq 'BUY')? 'green' : 'red'}"
+														value="#{graphBean.exponentialMoving10}"></h:outputText>
+												</div>
+												<div class="mb-3">
+													<h:outputText
+														style="color: #{(graphBean.simpleMoving10 eq 'BUY')? 'green' : 'red'}"
+														value="#{graphBean.simpleMoving10}"></h:outputText>
+												</div>
+												<div class="mb-3">
+													<h:outputText
+														style="color: #{(graphBean.exponentialMoving15 eq 'BUY')? 'green' : 'red'}"
+														value="#{graphBean.exponentialMoving15}"></h:outputText>
+												</div>
+												<div class="mb-3 pt-4">
+													<h:outputText
+														style="color: #{(graphBean.simpleMoving15 eq 'BUY')? 'green' : 'red'}"
+														value="#{graphBean.simpleMoving15}"></h:outputText>
+												</div>
+												<div class="mb-4">
+													<h:outputText
+														style="color: #{(graphBean.exponentialMoving20 eq 'BUY')? 'green' : 'red'}"
+														value="#{graphBean.exponentialMoving20}"></h:outputText>
+												</div>
+												<div class="mb-3 pt-4">
+													<h:outputText
+														style="color: #{(graphBean.simpleMoving20 eq 'BUY')? 'green' : 'red'}"
+														value="#{graphBean.simpleMoving20}"></h:outputText>
+												</div>
+												<div class="mb-3 pt-4">
+													<h:outputText
+														style="color: #{(graphBean.ichimoku eq 'BUY')? 'green' : 'red'}"
+														value="#{graphBean.ichimoku}"></h:outputText>
+												</div>
+												<div class="mb-3 pt-5">
+													<h:outputText
+														style="color: #{(graphBean.volumeweight eq 'BUY')? 'green' : 'red'}"
+														value="#{graphBean.volumeweight}"></h:outputText>
+												</div>
+												<div class="mb-3 pt-4">
+													<h:outputText
+														style="color: #{(graphBean.hull eq 'BUY')? 'green' : 'red'}"
+														value="#{graphBean.hull}"></h:outputText>
+												</div>
+											</fieldset>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<script>
+				anychart
+						.onDocumentReady(function() {
+							var gauge = anychart.gauges.circular();
+							gauge.fill('#fff').stroke(null).padding(0).margin(
+									100).startAngle(270).sweepAngle(180);
+
+							gauge.data([ "#{graphBean.rsiValue}" ]);
+							gauge.axis().scale().minimum(0).maximum(100).ticks(
+									{
+										interval : 10
+									}).minorTicks({
+								interval : 5
+							});
+
+							gauge.axis().fill('#545f69').width(1).ticks({
+								type : 'line',
+								fill : 'white',
+								length : 2
+							});
+
+							gauge.title().useHtml(true).padding(0).fontColor(
+									'#212121').hAlign('center').margin(
+									[ 0, 0, 10, 0 ]);
+
+							gauge.needle().stroke('2 #545f69').startRadius('5')
+									.endRadius('90').startWidth('0.1')
+									.endWidth('0.1').middleWidth('0.1');
+
+							gauge.cap().radius('3').enabled(true).fill(
+									'#545f69');
+
+							gauge.range(0, {
+								from : 0,
+								to : 30,
+								position : 'inside',
+								fill : '#dd2c00 0.4',
+								startSize : 50,
+								endSize : 50,
+								radius : 98
+							});
+
+							gauge.range(1, {
+								from : 30,
+								to : 70,
+								position : 'inside',
+								fill : '#ffa000 0.4',
+								startSize : 50,
+								endSize : 50,
+								radius : 98
+							});
+
+							gauge.range(2, {
+								from : 70,
+								to : 100,
+								position : 'inside',
+								fill : '#009900 0.4',
+								startSize : 50,
+								endSize : 50,
+								radius : 98
+							});
+
+							gauge.label(1).text('Sell').fontColor('#212121')
+									.fontSize(14).offsetY('68').offsetX(25)
+									.anchor('center');
+
+							gauge.label(2).text('Neutral').fontColor('#212121')
+									.fontSize(14).offsetY('68').offsetX(90)
+									.anchor('center');
+
+							gauge.label(3).text('Buy').fontColor('#212121')
+									.fontSize(14).offsetY('68').offsetX(155)
+									.anchor('center');
+
+							gauge.container('container_1');
+							gauge.draw();
+
+							var gauge_1 = anychart.gauges.circular();
+							gauge_1.fill('#fff').stroke(null).padding(0)
+									.margin(100).startAngle(270)
+									.sweepAngle(180);
+
+							gauge_1.data([ "#{graphBean.oscillatorValue}" ]);
+							gauge_1.axis().scale().minimum(0).maximum(100)
+									.ticks({
+										interval : 10
+									}).minorTicks({
+										interval : 5
+									});
+
+							gauge_1.axis().fill('#545f69').width(1).ticks({
+								type : 'line',
+								fill : 'white',
+								length : 2
+							});
+
+							gauge_1.title().useHtml(true).padding(0).fontColor(
+									'#212121').hAlign('center').margin(
+									[ 0, 0, 10, 0 ]);
+
+							gauge_1.needle().stroke('2 #545f69').startRadius(
+									'5').endRadius('90').startWidth('0.1')
+									.endWidth('0.1').middleWidth('0.1');
+
+							gauge_1.cap().radius('3').enabled(true).fill(
+									'#545f69');
+
+							gauge_1.range(0, {
+								from : 0,
+								to : 30,
+								position : 'inside',
+								fill : '#dd2c00 0.4',
+								startSize : 50,
+								endSize : 50,
+								radius : 98
+							});
+
+							gauge_1.range(1, {
+								from : 30,
+								to : 70,
+								position : 'inside',
+								fill : '#ffa000 0.4',
+								startSize : 50,
+								endSize : 50,
+								radius : 98
+							});
+
+							gauge_1.range(2, {
+								from : 70,
+								to : 100,
+								position : 'inside',
+								fill : '#009900 0.4',
+								startSize : 50,
+								endSize : 50,
+								radius : 98
+							});
+
+							gauge_1.label(1).text('Sell').fontColor('#212121')
+									.fontSize(14).offsetY('68').offsetX(25)
+									.anchor('center');
+
+							gauge_1.label(2).text('Neutral').fontColor(
+									'#212121').fontSize(14).offsetY('68')
+									.offsetX(90).anchor('center');
+
+							gauge_1.label(3).text('Buy').fontColor('#212121')
+									.fontSize(14).offsetY('68').offsetX(155)
+									.anchor('center');
+
+							gauge_1.container('container_2');
+							gauge_1.draw();
+
+							var gauge_2 = anychart.gauges.circular();
+							gauge_2.fill('#fff').stroke(null).padding(0)
+									.margin(100).startAngle(270)
+									.sweepAngle(180);
+
+							gauge_2.data([ "#{graphBean.movingAverageValue}" ]);
+							gauge_2.axis().scale().minimum(0).maximum(100)
+									.ticks({
+										interval : 10
+									}).minorTicks({
+										interval : 5
+									});
+
+							gauge_2.axis().fill('#545f69').width(1).ticks({
+								type : 'line',
+								fill : 'white',
+								length : 2
+							});
+
+							gauge_2.title().useHtml(true).padding(0).fontColor(
+									'#212121').hAlign('center').margin(
+									[ 0, 0, 10, 0 ]);
+
+							gauge_2.needle().stroke('2 #545f69').startRadius(
+									'5').endRadius('90').startWidth('0.1')
+									.endWidth('0.1').middleWidth('0.1');
+
+							gauge_2.cap().radius('3').enabled(true).fill(
+									'#545f69');
+
+							gauge_2.range(0, {
+								from : 0,
+								to : 30,
+								position : 'inside',
+								fill : '#dd2c00 0.4',
+								startSize : 50,
+								endSize : 50,
+								radius : 98
+							});
+
+							gauge_2.range(1, {
+								from : 30,
+								to : 70,
+								position : 'inside',
+								fill : '#ffa000 0.4',
+								startSize : 50,
+								endSize : 50,
+								radius : 98
+							});
+
+							gauge_2.range(2, {
+								from : 70,
+								to : 100,
+								position : 'inside',
+								fill : '#009900 0.4',
+								startSize : 50,
+								endSize : 50,
+								radius : 98
+							});
+
+							gauge_2.label(1).text('Sell').fontColor('#212121')
+									.fontSize(14).offsetY('68').offsetX(25)
+									.anchor('center');
+
+							gauge_2.label(2).text('Neutral').fontColor(
+									'#212121').fontSize(14).offsetY('68')
+									.offsetX(90).anchor('center');
+
+							gauge_2.label(3).text('Buy').fontColor('#212121')
+									.fontSize(14).offsetY('68').offsetX(155)
+									.anchor('center');
+
+							gauge_2.container('container_3');
+							gauge_2.draw();
+
+						});
+			</script>
+		</h:form>
+	</ui:define>
+</ui:composition>

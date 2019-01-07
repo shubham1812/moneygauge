@@ -1,0 +1,27 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:common="http://java.sun.com/jsf/composite/components/common"
+	template="/common/templates/BasicTemplate.xhtml">
+
+	<ui:define name="head">
+		<ui:include src="head.xhtml"></ui:include>
+	</ui:define>
+
+	<ui:define name="header">
+		<ui:include src="header.xhtml"></ui:include>
+	</ui:define>
+
+	<ui:define name="content">
+		<div class="content-container">
+			<ui:include src="content.xhtml"></ui:include>
+		</div>
+	</ui:define>
+
+	<ui:define name="footer">
+		<ui:include src="footer.xhtml"></ui:include>
+	</ui:define>
+
+</ui:composition>

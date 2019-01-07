@@ -1,0 +1,474 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core" template="/home.xhtml">
+
+	<ui:define name="content">
+
+		<div class="container mt-4">
+    		<div class="row" style="margin-right: -50px; margin-left: -50px; height: 1050px;">
+    			<div class="col-8 h-100"> 
+    				<div class="card userprofile-card">
+					<div class="card-body">
+					<iframe height="400px" width="100%"
+					src="https://ssltvc.forexprostools.com/?pair_ID=6408&amp;height=480&amp;width=1900&amp;interval=300&amp;plotStyle=area&amp;domain_ID=1&amp;lang_ID=1&amp;timezone_ID=7"></iframe>
+					
+				<div class="card userprofile-card">
+				<div class="card-header card-top text-center">Search Stock</div>
+				<div class="input-group mt-3">
+					<div class="form-group" style="left: 5%; width: 100%">
+						<input id="text1" class="autocomplete"
+							placeholder="Stock Abbreviation" type="text"
+							style="height: 35px !important; font-size: 100%; width: 100% !important"
+							aria-describedby="basic-addon2" />
+					</div>
+					<div class="form-group" style="width: 100%">
+						<input type="text" id="currselect" class="autocomplete2"
+							style="border-radius: 6px; height: 35px !important; font-size: 100%; width: 100% !important"
+							placeholder="Currency" aria-describedby="basic-addon2"></input>
+					</div>
+
+					<div class="input-group"
+						style="left: 5%; height: 10%; bottom: 10%;">
+						<input type="submit" id='daily' value="Day"
+							style="text-transform: inherit; display: inline-block; top: 10px; max-width: 20%; max-height: 10%;"
+							class="btn btn-secondary"></input><input type="submit"
+							id='monthly' value="Month"
+							style="text-transform: inherit; display: inline-block; max-width: 20%; max-height: 10%;"
+							class="btn btn-secondary"></input><input type="submit"
+							id='yearly' value="Year"
+							style="text-transform: inherit; display: inline-block; max-width: 20%; max-height: 10%;"
+							class="btn btn-secondary"></input><input type="submit"
+							id='5yearly' value="5 Years"
+							style="text-transform: inherit; display: inline-block; max-width: 20%; max-height: 10%;"
+							class="btn btn-secondary"></input>
+					</div>
+
+
+
+
+					<canvas id="myChart" width="1000" height="500"
+						style="border: 1px; border-color: #d3d3d3;"></canvas>
+					<br></br>
+
+
+					<!--<div class="input-group"style="left:35%">
+			<input type="submit" id='button1' value="Graph" style="border-radius:50%;text-transform:inherit;display:inline-block;max-width:20%;max-height=10%;" class="btn btn-success btn-block">
+			</div>-->
+				</div>
+			</div>
+    				
+    			</div>
+    				
+    		
+    		
+    		</div>
+    	</div>
+    	<div class="col-4">
+    		<div class="card userprofile-card h-100">
+    			<div class="card-header card-top text-center" >Leading Stocks</div>
+				<div class="card-body overflow text-center">
+								
+					<iframe
+			src="https://www.widgets.investing.com/leading-stocks?theme=darkTheme&amp;pairs=243,6435,6408,26490,8092,6497,13063,13994,277,8021,39291,244,40041,8192,7884,20846"
+			width="100%" height="1050px" frameborder="0" allowtransparency="true"
+			marginwidth="0" marginheight="0"></iframe>
+		
+				</div>
+    		
+    		</div>
+    	</div>
+    	
+    	
+	</div>
+	</div>		
+
+		<br />
+
+
+
+
+		<script type="text/javascript"
+			src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+		<script type="text/javascript"
+			src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+		<script type="text/javascript"
+			src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+
+		<script
+			src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.js"></script>
+		<script
+			src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js"></script>
+		<script src="moddedchartjs-plugin-zoom.js"></script>
+		<script
+			src='https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.16.1/lodash.min.js'></script>
+		<script src='https://unpkg.com/fuse.js@2.5.0/src/fuse.min.js'></script>
+		<script src="/js/currencies.js"></script>
+		<script src="/js/companySymbols.js"></script>
+		<script src="/js/companyFuseSettings.js"></script>
+		<script src="/js/currencyFuseSettings.js"></script>
+
+
+
+		<script
+			src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+		<script>
+			var stockabbrev1 = "stock";
+			var stockabbrev2;
+			var currencabbrev1 = "currency";
+			var currencabbrev2;
+			var timespan;
+			var timespan2;
+			var limit;
+			var datatype;
+			var obj;
+			var datarray;
+
+			var ctx = document.getElementById('myChart').getContext('2d');
+			var chart;
+			var prevArrLength;
+			var currArrLength;
+			var dataForChart;
+			var labels;
+			var url;
+			var url1;
+			var url2;
+			var urlCase;
+			var currCase = 0;
+			var currencmult;
+
+			//every 10 seconds check api for changes
+			//window.setInterval(updateDynamically,5000);
+
+			drawBlankChart1();
+			document.getElementById("daily").onclick = function() {
+				timespan = "daily";
+				saveInput1()
+			};
+			document.getElementById("monthly").onclick = function() {
+				timespan = "monthly";
+				saveInput1()
+			};
+			document.getElementById("yearly").onclick = function() {
+				timespan = "yearly";
+				saveInput1()
+			};
+			document.getElementById("5yearly").onclick = function() {
+				timespan = "5yearly";
+				saveInput1()
+			};
+			//document.getElementById("timespan1").onclick = function() {saveInput1()};
+			//document.getElementById("datatype1").onclick = function() {saveInput1()};
+			//document.getElementById("text1").onclick=function(){saveInput1();};
+			//document.getElementById("currselect").onclick = function() {saveInput1();};
+			document.getElementById("button1").onclick = function() {
+				saveInput1();
+			};
+			function updateDynamically() {
+				//replace 7 with new length of array
+				//drawCanvas1();
+				searchAPI1();
+
+				chart.data.datasets[0].data = dataForChart;
+				chart.data.labels = labels;
+				if (chart.data.datasets[0].data == undefined
+						|| chart.data.labels == undefined) {
+					drawBlankChart1();
+				} else {
+					setTimeout(function() {
+						chart.update();
+					}, 300);
+				}
+			}
+
+			function changeTimeSpan() {
+
+				console.log(250);
+				//console.log(document.getElementById("daily").value);
+				if (timespan == 'daily') {
+					timespan = '1d';
+					timespan2 = 'histominute?';
+					limit = '1440';
+					console.log(timespan);
+				}
+				if (timespan == "monthly") {
+					timespan = '1m';
+					timespan2 = 'histoday?';
+					limit = 30;
+					console.log(timespan);
+				}
+				if (timespan == "yearly") {
+					timespan = '1y';
+					timespan2 = 'histoday?';
+					limit = 365;
+					console.log(timespan);
+				}
+
+				if (timespan == "5yearly") {
+					timespan = '5y';
+					timespan2 = 'histoday?';
+					limit = 1825;
+					console.log(timespan);
+				}
+
+			}
+			function changeData() {
+				if ((document.getElementById("datatype1").value) == "changePercent") {
+					datatype = 'changePercent';
+				}
+				if ((document.getElementById("datatype1").value) == "changeOverTime") {
+					datatype = 'changeOverTime';
+				}
+				if ((document.getElementById("datatype1").value) == "Value") {
+					datatype = 'Value';
+				}
+
+			}
+
+			function saveInput1() {
+
+				stockabbrev1 = document.getElementById("text1").value;
+				stockabbrev1 = stockabbrev1.toUpperCase();
+				//changeData();
+				changeTimeSpan();
+
+				datatype = 'Value';
+
+				url1 = 'https://api.iextrading.com/1.0/stock/' + stockabbrev1
+						+ '/chart/' + timespan;
+				if (timespan2 == 'histominutes?') {
+					url2 = 'https://min-api.cryptocompare.com/data/'
+							+ timespan2 + 'fsym=' + stockabbrev1
+							+ '&amp;tsym=USD&amp;aggregate=1&amp;e=CCCAGG';
+				} else {
+					url2 = 'https://min-api.cryptocompare.com/data/'
+							+ timespan2 + 'fsym=' + stockabbrev1
+							+ '&amp;tsym=USD&amp;limit=' + limit
+							+ '&amp;aggregate=1&amp;e=CCCAGG';
+				}
+
+				currencabbrev1 = document.getElementById("currselect").value;
+
+				searchAPI1();
+
+				setTimeout(drawCanvas1, 1800);
+
+			}
+
+			//case statement can be used to specify api page as string
+			function searchAPI1() {
+				$.ajax({
+					url : url1,
+					dataType : 'json',
+					type : 'get',
+					cache : false,
+					success : function(data) {
+						console.log(data);
+
+						datarray = data;
+						labels = datarray.map(function(e) {
+							if (timespan == '1d') {
+								return e.minute;
+							}
+							if (timespan.includes('m')
+									|| timespan.includes('y')) {
+								return e.date;
+							}
+						});
+						dataForChart = datarray.map(function(e) {
+							if (datatype == 'changePercent'
+									&amp;&amp; !timespan.includes('d')) {
+								return e.changePercent;
+							}
+							if (datatype == 'changeOverTime') {
+								return e.changeOverTime;
+							}
+							if (datatype == 'Value') {
+								return e.close;
+							}
+
+						});
+
+					},
+					error : function() {
+						searchAPI2();
+					}
+
+				});
+				$
+						.ajax({
+							url : 'https://v3.exchangerate-api.com/pair/b00cb74253f41b45f3074298/USD/'
+									+ currencabbrev1,
+							dataType : 'json',
+							type : 'get',
+							cache : false,
+							success : function(data) {
+								currencmult = data.rate;
+								console.log(currencmult);
+								dataForChart = dataForChart.map(function(x) {
+									return x * currencmult;
+								});
+							}
+						});
+			}
+			function searchAPI2() {
+				$.ajax({
+					url : url2,
+					dataType : 'json',
+					type : 'get',
+					cache : false,
+					success : function(data) {
+						datarray = data.Data;
+						labels = datarray.map(function(e) {
+
+							return e.time;
+
+						});
+						dataForChart = datarray.map(function(e) {
+							if (datatype == 'changePercent'
+									&amp;&amp; !timespan.includes('d')) {
+								return e.changePercent;
+							}
+							if (datatype == 'changeOverTime') {
+								return e.changeOverTime;
+							}
+							if (datatype == 'Value') {
+								return e.close;
+							}
+
+						});
+
+						labels = labels.map(function(x) {
+							var d = new Date(0);
+							d.setUTCSeconds(x);
+							var h = d.getHours();
+							var m = d.getMinutes();
+							return h + ":" + m;
+						});
+					}
+
+				});
+				$
+						.ajax({
+							url : 'https://v3.exchangerate-api.com/pair/b00cb74253f41b45f3074298/USD/'
+									+ currencabbrev1,
+							dataType : 'json',
+							type : 'get',
+							cache : false,
+							success : function(data) {
+								currencmult = data.rate;
+								console.log(currencmult);
+							}
+						});
+			}
+
+			function drawBlankChart1() {
+
+				chart = new Chart(ctx, {
+					// The type of chart we want to create
+					type : 'line',
+
+					// The data for our dataset
+					data : {
+						labels : [ "1", "2", "3", "4", "5", "6", "7" ],
+						datasets : [ {
+							label : stockabbrev1 + " : " + currencabbrev1,
+						} ]
+					},
+
+					// Configuration options go here
+					options : {// Boolean - whether or not the chart should be responsive and
+						//resize when the browser does.
+						responsive : true,
+						// Boolean - whether to maintain the starting aspect ratio or not when responsive,
+						// if set to false, will take up entire container
+						maintainAspectRatio : true,
+
+					}
+				});
+			}
+
+			function drawCanvas1() {
+				// dataForChart= dataForChart.map(function(x) { return x * currencmult; });
+				//setTimeout(function(){},1000);
+
+				chart &amp;&amp; chart.destroy();
+				chart = new Chart(ctx, {
+					type : 'line',
+					data : {
+						labels : labels,
+						datasets : [ {
+							label : stockabbrev1.toUpperCase() + ' : '
+									+ currencabbrev1,
+							backgroundColor : 'rgb'
+									+ '('
+									+ (Math.floor(Math.random() * 256))
+											.toString()
+									+ ','
+									+ (Math.floor(Math.random() * 256))
+											.toString()
+									+ ','
+									+ (Math.floor(Math.random() * 256))
+											.toString() + ')',
+							borderColor : 'rgb'
+									+ '('
+									+ (Math.floor(Math.random() * 256))
+											.toString()
+									+ ','
+									+ (Math.floor(Math.random() * 256))
+											.toString()
+									+ ','
+									+ (Math.floor(Math.random() * 256))
+											.toString() + ')',
+							data : dataForChart,
+						//lineTension:0
+						} ]
+					},
+
+					// Configuration options go here
+					options : {
+						scales : {
+							yAxes : [ {
+								ticks : {
+									beginAtZero : false
+								}
+							} ]
+						},
+
+						responsive : true,
+						maintainAspectRatio : true,
+						pan : {
+							enabled : true,
+							mode : 'x',
+							sensitivity : 10
+
+						//speed: 10,
+						//threshold: 10
+						},
+
+						zoom : {
+							// Boolean to enable zooming
+							enabled : true,
+							drag : false,
+							// Zooming directions. Remove the appropriate direction to disable 
+							// Eg. 'y' would only allow zooming in the y direction
+							mode : 'x',
+							sensitivity : 0.0000001,
+							limits : {
+								max : 10,
+								min : 0.5
+							}
+						}
+
+					}
+				});
+
+			}
+		</script>
+		<hr />
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,584 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core" template="/home.xhtml">
+
+	<ui:define name="content">
+
+		<div class="container mt-4 mb-5">
+			<div class="row"
+				style="margin-right: -50px; margin-left: -50px; height: 1200px;">
+				<div class="col-7">
+					<div class="card background-card" style="height:1225px;">
+						<div class="card-body">
+							<div class="input-group mb-5">
+								<canvas id="myChart" class="right2"></canvas>
+							</div>
+							<div class="card userprofile-card ml-1 mr-2"
+								style="width: 47%; height: 50%; border-color: black; display: inline-flex;">
+
+								<h:form id="buyForm">
+									<p:growl id="growl" showDetail="true" sticky="true"
+										style="z-index:40000" />
+									<div class="card-body" style="bottom: 10%;">
+										<ui:fragment
+											rendered="#{webUserBean.valid and webUserBean.permissions.tradingOption and webUserBean.permissions.buyingOption}">
+											<div class="login-panel panel panel-default">
+												<div class="panel-heading">
+													<h3 style="font-size: 75%" id="Balance">
+														Available Balance:
+														<h:commandLink style="color:#17a2b8;"
+															action="#{orderPlaceController.availableUsdBalance}">#{orderBean.orderData.availableUsdBalance}</h:commandLink>
+													</h3>
+												</div>
+												<div class="panel-body">
+													<div class="col-3" style="display: inline-grid;">
+														<label class="font-weight-light pr-3 pt-2"
+															style="font-size: 15px;">Crypto:</label> <label
+															class="font-weight-light pr-3 pt-4 pb-2"
+															style="font-size: 15px;">Quantity:</label> <label
+															class="font-weight-light pr-3 pt-4"
+															style="font-size: 15px;">Price:</label> <label
+															class="font-weight-light pr-3 pt-4"
+															style="font-size: 15px;">Total:</label>
+													</div>
+													<div class="col-8" style="display: inline-grid;">
+														<fieldset>
+															<div style="display: inline-flex;">
+																<div class="form-group">
+																	<p:inputText required="true" id="crypto"
+																		requiredMessage="Please enter currency"
+																		validatorMessage="Please enter valid currency"
+																		placeholder="Cryptocurrency*"
+																		styleClass="form-control"
+																		value="#{orderBean.orderData.buyingStock}">
+																	</p:inputText>
+																	<h:message styleClass="form-error" for="crypto" />
+																</div>
+															</div>
+															<div>
+																<div class="form-group">
+																	<p:inputText required="true" id="quantity"
+																		requiredMessage="Please enter quantity"
+																		validatorMessage="Please enter valid quantity"
+																		placeholder="Quantity*" styleClass="form-control"
+																		value="#{orderBean.orderData.buyingVolume}">
+																		<p:ajax event="change"
+																			listener="#{orderPlaceController.buyQuantityChange()}"
+																			update="buyForm" />
+																	</p:inputText>
+																	<h:message styleClass="form-error" for="quantity" />
+																</div>
+															</div>
+															<div>
+																<div class="form-group">
+																	<p:inputText required="true" id="price"
+																		requiredMessage="Please enter price"
+																		validatorMessage="Please enter valid price"
+																		disabled="true" placeholder="Price*"
+																		styleClass="form-control"
+																		value="#{orderBean.orderData.buyingPrice}">
+																	</p:inputText>
+																	<h:message styleClass="form-error" for="price" />
+																</div>
+															</div>
+															<div>
+																<div class="form-group">
+																	<p:inputText required="true" id="total"
+																		requiredMessage="Please enter total amount"
+																		validatorMessage="Please enter valid amount"
+																		placeholder="Total*" styleClass="form-control"
+																		disabled="true"
+																		value="#{orderBean.orderData.buyingTotalAmount}">
+																	</p:inputText>
+																	<h:message styleClass="form-error" for="total" />
+																</div>
+															</div>
+															<div>
+																<div class="form-group">
+																	 <p:selectBooleanButton value="#{orderBean.orderData.currency}" styleClass="form-control" id="buy-currency"  onLabel="USD" offLabel="INR" onIcon="pi pi-dollar" offIcon="pi" >
+																	  <p:ajax update=":buyForm :sellForm" listener="#{orderPlaceController.changeBuyingValues()}" />
+																	</p:selectBooleanButton>
+																	<h:message styleClass="form-error" for="buy-currency" />
+																</div>
+															</div>
+															<p:messages for="invalidRequest" styleClass="form-error " />
+															<p:commandButton
+																action="#{orderPlaceController.order('buy')}"
+																id="buyBtn" styleClass="btn btn-success btn-block"
+																value="Buy" update=":buyForm :sellForm :buyingOrdersForm :sellingOrdersForm	">
+															</p:commandButton>
+														</fieldset>
+
+													</div>
+												</div>
+											</div>
+										</ui:fragment>
+										<ui:fragment rendered="#{!webUserBean.valid}">
+											<a class="custom-head forgot" href="signin">Login</a> to trade</ui:fragment>
+										<ui:fragment
+											rendered="#{webUserBean.valid and !webUserBean.permissions.tradingOption}">
+																	Trading option is closed now. Please email us at <a
+												href="mailto:support@moneygauge.com">support@moneygauge.com</a> for more details.
+															</ui:fragment>
+										<ui:fragment
+											rendered="#{webUserBean.valid and webUserBean.permissions.tradingOption and !webUserBean.permissions.buyingOption}">
+																	Buying option is closed now. Please email us at <a
+												href="mailto:support@moneygauge.com">support@moneygauge.com</a> for more details.
+															</ui:fragment>
+									</div>
+								</h:form>
+							</div>
+							<div class="card userprofile-card ml-2"
+								style="width: 47%; height: 50%; border-color: black; display: inline-flex;">
+								<h:form id="sellForm">
+									<div class="card-body" style="bottom: 10%;">
+										<ui:fragment
+											rendered="#{webUserBean.valid and webUserBean.permissions.tradingOption and webUserBean.permissions.sellingOption}">
+											<div class="login-panel panel panel-default">
+												<div class="panel-heading">
+													<h3 style="font-size: 75%" id="Quantity">
+														Available Quantity:
+														<h:commandLink style="color:#17a2b8;"
+															action="#{orderPlaceController.availableStockBalance}">#{orderBean.orderData.availableStockBalance}</h:commandLink>
+													</h3>
+
+												</div>
+												<div class="panel-body">
+													<div class="col-3" style="display: inline-grid;">
+														<label class="font-weight-light pr-3 pt-2"
+															style="font-size: 15px;">Crypto:</label> <label
+															class="font-weight-light pr-3 pt-4 pb-2"
+															style="font-size: 15px;">Quantity:</label> <label
+															class="font-weight-light pr-3 pt-4"
+															style="font-size: 15px;">Price:</label> <label
+															class="font-weight-light pr-3 pt-4"
+															style="font-size: 15px;">Total:</label>
+													</div>
+													<div class="col-8" style="display: inline-grid;">
+														<fieldset>
+															<div>
+																<div class="form-group">
+																	<p:inputText required="true" id="currencySell"
+																		requiredMessage="Please enter currency"
+																		validatorMessage="Please enter valid currency"
+																		value="#{orderBean.orderData.sellingStock}"
+																		placeholder="Cryptocurrency*"
+																		styleClass="form-control ">
+																	</p:inputText>
+																	<h:message styleClass="form-error" for="currencySell" />
+																</div>
+															</div>
+															<div>
+																<div class="form-group">
+																	<p:inputText required="true" id="quantitySell"
+																		requiredMessage="Please enter quantity"
+																		validatorMessage="Please enter valid quantity"
+																		placeholder="Quantity*" styleClass="form-control"
+																		value="#{orderBean.orderData.sellingVolume}">
+																		<p:ajax event="change"
+																			listener="#{orderPlaceController.sellQuantityChange()}"
+																			update="sellForm" />
+																	</p:inputText>
+																	<h:message styleClass="form-error" for="quantitySell" />
+																</div>
+															</div>
+															<div>
+																<div class="form-group">
+																	<p:inputText required="true" id="priceSell"
+																		requiredMessage="Please enter price"
+																		validatorMessage="Please enter valid price"
+																		placeholder="Price*" styleClass="form-control"
+																		disabled="true"
+																		value="#{orderBean.orderData.buyingPrice}">
+																	</p:inputText>
+																	<h:message styleClass="form-error" for="priceSell" />
+																</div>
+															</div>
+															<div>
+																<div class="form-group">
+																	<p:inputText required="true" id="totalSell"
+																		requiredMessage="Please enter total amount"
+																		validatorMessage="Please enter valid amount"
+																		placeholder="Total*" styleClass="form-control"
+																		disabled="true"
+																		value="#{orderBean.orderData.sellingTotalAmount}">
+																	</p:inputText>
+																	<h:message styleClass="form-error" for="totalSell" />
+																</div>
+															</div>
+															<div>
+																<div class="form-group">
+																	 <p:selectBooleanButton value="#{orderBean.orderData.currency}" styleClass="form-control" id="sell-currency"  onLabel="USD" offLabel="INR" onIcon="pi pi-dollar" offIcon="pi" >
+																	  <p:ajax update=":buyForm :sellForm" listener="#{orderPlaceController.changeSellingValues()}" />
+																	</p:selectBooleanButton>
+																	<h:message styleClass="form-error" for="sell-currency" />
+																</div>
+															</div>
+															<p:messages for="invalidRequest" styleClass="form-error " />
+															<p:commandButton
+																action="#{orderPlaceController.order('sell')}"
+																id="sellBtn" styleClass="btn btn-success btn-block"
+																value="Sell" update=":sellForm :buyForm :buyingOrdersForm :sellingOrdersForm">
+															</p:commandButton>
+														</fieldset>
+													</div>
+												</div>
+											</div>
+										</ui:fragment>
+										<ui:fragment rendered="#{!webUserBean.valid}">
+											<a class="custom-head forgot" href="signin">Login</a> to trade</ui:fragment>
+										<ui:fragment
+											rendered="#{webUserBean.valid and !webUserBean.permissions.tradingOption and webUserBean.permissions.sellingOption}">
+																	Trading option is closed now. Please email us at <a
+												href="mailto:support@moneygauge.com">support@moneygauge.com</a> for more details.
+															</ui:fragment>
+										<ui:fragment
+											rendered="#{webUserBean.valid and webUserBean.permissions.tradingOption and !webUserBean.permissions.sellingOption}">
+																	Selling option is closed now. Please email us at <a
+												href="mailto:support@moneygauge.com">support@moneygauge.com</a> for more details.
+															</ui:fragment>
+									</div>
+								</h:form>
+							</div>
+							<ui:fragment rendered="#{orderBean.orderData.buyingOrders.size() gt 0}">
+							<div class="card userprofile-card ml-1 mr-2 mt-3"
+								style="width: 47%; height: 400px; border-color: black; display: inline-flex; overflow-y:scroll;">
+								<h3 class="mt-3 ml-3" style="font-size: 75%" id="Balance">Buy
+									Orders:</h3>
+								<h:form id="buyingOrdersForm">
+									<table class="table table-bordered" style="font-size: 15px;">
+										<thead>
+											<tr>
+												<th scope="col">Buying Price</th>
+												<th scope="col">Volume</th>
+												<th scope="col">Total Amount</th>
+											</tr>
+										</thead>
+										<tbody style="color:green;">
+											<ui:repeat var="buy"
+												value="#{orderBean.orderData.buyingOrders}">
+												<tr>
+													<td>#{buy.price}</td>
+													<td>#{buy.volume}</td>
+													<td>#{buy.totalAmount}</td>
+												</tr>
+											</ui:repeat>
+										</tbody>
+									</table>
+								</h:form>
+							</div>
+							</ui:fragment>
+							<ui:fragment rendered="#{orderBean.orderData.sellingOrders.size() gt 0}">
+							<div class="card userprofile-card ml-2"
+								style="width: 47%; height: 400px; border-color: black; display: inline-flex; overflow-y:scroll;">
+								<h3 class="mt-3 ml-3" style="font-size: 75%" id="Balance">Sell
+									Orders:</h3>
+								<h:form id="sellingOrdersForm">
+									<table class="table table-bordered" style="font-size: 15px;">
+										<thead>
+											<tr>
+												<th scope="col">Selling Price</th>
+												<th scope="col">Volume</th>
+												<th scope="col">Total Amount</th>
+											</tr>
+										</thead>
+										<tbody style="color:red;">
+											<ui:repeat var="sell"
+												value="#{orderBean.orderData.sellingOrders}">
+												<tr>
+													<td>#{sell.price}</td>
+													<td>#{sell.volume}</td>
+													<td>#{sell.totalAmount}</td>
+												</tr>
+											</ui:repeat>
+										</tbody>
+									</table>
+								</h:form>
+							</div>
+							</ui:fragment>
+
+						</div>
+					</div>
+
+				</div>
+
+				<div class="col-5">
+					<div class="card userprofile-card" style="height: 1225px;">
+						<div class="card-body overflow text-center">
+							<h:form id="cryptoList">
+								<table class="table table-striped  table-borderless table-hover"
+									style="text-align: center;">
+									<thead class="thead-dark">
+										<tr>
+											<th scope="col">Name</th>
+											<th scope="col">Symbol</th>
+											<th scope="col">Price</th>
+										</tr>
+									</thead>
+									<tbody>
+										<ui:repeat var="stock" value="#{currentMarketBean.webStock}">
+											<tr>
+												<td><h:commandLink style="color:#17a2b8;"
+														action="#{marketController.searchStock(stock.symbol)}" update=":buyingOrdersForm :sellingOrdersForm">
+														<h:outputText value="#{stock.tickerName}"
+															styleClass="capitalized" />
+													</h:commandLink></td>
+												<td>#{stock.symbol} <br /> <h:panelGroup
+														style="font-size:14px; color: #{(stock.hrChange lt 0)? 'red' : 'green'}">
+														<h:outputText
+															value="#{(stock.hrChange lt 0) ? -stock.hrChange : stock.hrChange}">
+															<f:convertNumber pattern="#0.00" />
+														</h:outputText>%
+													</h:panelGroup> <!-- More information goes here -->
+												</td>
+												<td>$#{stock.currentPrice} <br /> <h:panelGroup
+														style="font-size:14px; color: #{(stock.dayChange lt 0)? 'red' : 'green'}">
+														<h:outputText
+															value="#{(stock.dayChange lt 0) ? -stock.dayChange : stock.dayChange}">
+															<f:convertNumber pattern="#0.00" />
+														</h:outputText>%
+													</h:panelGroup> <!-- More information goes here -->
+												</td>
+											</tr>
+										</ui:repeat>
+									</tbody>
+								</table>
+							</h:form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<h:panelGroup id="graphDiv">
+			<script
+				src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+			<script>
+			var stockabbrev1 = "stock";
+			var stockabbrev2;
+			var currencabbrev1 = "currency";
+			var currencabbrev2;
+			var timespan;
+			var datatype;
+			var obj;
+			var datarray;
+			var date = [];
+			var open = [];
+			var high = [];
+			var low = [];
+			var close = [];
+			var volume = [];
+			var unadjustedVolume = [];
+			var change = [];
+			var changePercent = [];
+			var vwap = [];
+			var label = [];
+			var changeOverTime = [];
+			var marketNumberOfTrades;
+			var ctx = document.getElementById('myChart').getContext('2d');
+			var chart;
+
+			drawBlankChart1();
+			document.getElementById("timespan1").onclick = function() {
+				saveInput1()
+			};
+			document.getElementById("datatype1").onclick = function() {
+				saveInput1()
+			};
+			document.getElementById("currselect").onclick = function() {
+				saveInput1()
+			};
+			document.getElementById("button1").onclick = function() {
+				saveInput1()
+			};
+
+			function changeTimeSpan() {
+				if ((document.getElementById("timespan1").value) == "Daily") {
+					timespan = '1d';
+				}
+				if ((document.getElementById("timespan1").value) == "Monthly") {
+					timespan = '1m';
+				}
+				if ((document.getElementById("timespan1").value) == "5 Years") {
+					timespan = '5y';
+				}
+				/*
+				switch(document.getElementById("timespan1").value) {
+				case :
+					code block
+					break;
+				case y:
+					code block
+					break;
+				default:
+					code block
+				}
+				 */
+			}
+			function changeData() {
+				if ((document.getElementById("datatype1").value) == "changePercent") {
+					datatype = 'changePercent';
+				}
+				if ((document.getElementById("datatype1").value) == "changeOverTime") {
+					datatype = 'changeOverTime';
+				}
+				if ((document.getElementById("datatype1").value) == "Value") {
+					datatype = 'Value';
+				}
+			}
+
+			function saveInput1() {
+				//drawCanvas1();
+				stockabbrev1 = document.getElementById("text1").value;
+				changeTimeSpan();
+				changeData();
+				currencabbrev1 = document.getElementById("currselect").value;
+
+				//drawCanvas1();
+				searchAPI1();
+				setTimeout(drawCanvas1, 200);
+			}
+
+			//case statement can be used to specify api page as string
+			function searchAPI1() {
+				$.ajax({
+					url : 'https://api.iextrading.com/1.0/stock/'
+							+ stockabbrev1 + '/chart/' + timespan,
+					dataType : 'json',
+					type : 'get',
+					cache : false,
+					success : function(data) {
+						datarray = data;
+					}
+				});
+			}
+
+			function drawBlankChart1() {
+
+				chart = new Chart(ctx, {
+					// The type of chart we want to create
+					type : 'line',
+					// The data for our dataset
+					data : {
+						labels : [ "1", "2", "3", "4", "5", "6", "7", "8", "9","10"],
+						datasets : [ {
+							label : stockabbrev1 + " : " + currencabbrev1,
+							data: #{marketBean.webStock.priceUsd}
+						} ]
+					},
+
+					// Configuration options go here
+					options : {// Boolean - whether or not the chart should be responsive and
+						//resize when the browser does.
+						responsive : true,
+						// Boolean - whether to maintain the starting aspect ratio or not when responsive,
+						// if set to false, will take up entire container
+						maintainAspectRatio : true,
+
+					}
+				});
+			}
+
+			function drawCanvas1() {
+				var labels = datarray.map(function(e) {
+					if (timespan == '1d') {
+						return e.minute;
+					}
+					if (timespan.includes('m') || timespan.includes('y')) {
+						return e.date;
+					}
+				});
+				var data = datarray
+						.map(function(e) {
+							if (datatype == 'changePercent'
+									&amp;&amp; !timespan.includes('d')) {
+								return e.changePercent;
+							}
+							if (datatype == 'changeOverTime') {
+								return e.changeOverTime;
+							}
+							if (datatype == 'Value') {
+								return e.close;
+							}
+
+							//return e.changePercent;
+						});
+				chart &amp;&amp; chart.destroy();
+				chart = new Chart(ctx, {
+					type : 'line',
+					data : {
+						labels : labels,
+						datasets : [ {
+							label : stockabbrev1.toUpperCase() + ' : '
+									+ currencabbrev1,
+							backgroundColor : 'rgb'
+									+ '('
+									+ (Math.floor(Math.random() * 256))
+											.toString()
+									+ ','
+									+ (Math.floor(Math.random() * 256))
+											.toString()
+									+ ','
+									+ (Math.floor(Math.random() * 256))
+											.toString() + ')',
+							borderColor : 'rgb'
+									+ '('
+									+ (Math.floor(Math.random() * 256))
+											.toString()
+									+ ','
+									+ (Math.floor(Math.random() * 256))
+											.toString()
+									+ ','
+									+ (Math.floor(Math.random() * 256))
+											.toString() + ')',
+							data : data,
+						//lineTension:0
+						} ]
+					},
+
+					// Configuration options go here
+					options : {
+						scales : {
+							yAxes : [ {
+								ticks : {
+									beginAtZero : false
+								}
+							} ]
+						},// Boolean - whether or not the chart should be responsive and
+						//resize when the browser does.
+						responsive : true,
+						// Boolean - whether to maintain the starting aspect ratio or not when responsive,
+						// if set to false, will take up entire container
+						maintainAspectRatio : true,
+						pan : {
+							// Boolean to enable panning
+							enabled : true,
+
+							// Panning directions. Remove the appropriate direction to disable 
+							// Eg. 'y' would only allow panning in the y direction
+							mode : 'xy',
+						},
+
+						// Container for zoom options
+						zoom : {
+							// Boolean to enable zooming
+							enabled : true,
+
+							// Zooming directions. Remove the appropriate direction to disable 
+							// Eg. 'y' would only allow zooming in the y direction
+							mode : 'xy',
+						}
+
+					}
+				});
+			}
+		</script>
+		</h:panelGroup>
+		<hr />
+
+
+	</ui:define>
+</ui:composition>

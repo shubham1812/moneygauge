@@ -1,0 +1,148 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	template="/home.xhtml">
+
+
+
+	<ui:define name="content">
+		<!-- Page Header -->
+		<header class="masthead"
+			style="background-image: url(/img/investing.jpg);">
+			<div class="overlay"></div>
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-8 col-md-10 mx-auto">
+						<div class="site-heading">
+							<h1>Register Below</h1>
+							<br/>
+						</div>
+					</div>
+				</div>
+			</div>
+		</header>
+
+		<!-- Main Content -->
+
+		<div class="container">
+			<div class="row justify-content-md-center">
+				<div class="col-md-4">
+					<div class="login-panel panel panel-default">
+						<div class="panel-heading">
+							<h3 class="panel-title">Please fill out below</h3>
+						</div>
+						<div class="panel-body">
+							<h:form id="registrationForm">
+								<fieldset>
+									<h:panelGroup rendered="#{!registrationBean.twoFactorMailSent}">
+									<div class="form-group">
+										<span class="caret"></span>
+										<h:selectOneMenu id="title"
+											styleClass="selectpicker form-control "
+											value="#{registrationBean.webUserProfile.title}"
+											required="true" requiredMessage="Please select title">
+											<f:selectItem itemValue="" itemLabel="Title" />
+											<f:selectItem itemValue="Mr" itemLabel="Mr." />
+											<f:selectItem itemValue="Mrs" itemLabel="Mrs." />
+											<f:selectItem itemValue="Ms" itemLabel="Ms." />
+										</h:selectOneMenu>
+										<h:message for="title" errorClass="form-error" />
+									</div>
+									<div class="form-group">
+										<p:inputText required="true" id="firstName"
+											requiredMessage="Please enter first name."
+											value="#{registrationBean.webUserProfile.firstName}"
+											validatorMessage="Enter valid first name"
+											placeholder="First Name *" styleClass="form-control">
+											<f:validateRegex pattern="[a-zA-Z]+" />
+										</p:inputText>
+										<h:message for="firstName" errorClass="form-error" />
+									</div>
+									<div class="form-group">
+										<p:inputText required="true" id="lastName"
+											requiredMessage="Please enter last name."
+											value="#{registrationBean.webUserProfile.lastName}"
+											validatorMessage="Enter valid last name"
+											placeholder="Last Name *" styleClass="form-control">
+											<f:validateRegex pattern="[a-zA-Z]+" />
+										</p:inputText>
+										<h:message for="lastName" errorClass="form-error" />
+									</div>
+									<div class="form-group">
+										<p:inputText required="true" id="email"
+											requiredMessage="Please enter email."
+											value="#{registrationBean.webUserProfile.emailId}"
+											validatorMessage="Please enter valid email"
+											placeholder="Email ID *" styleClass="form-control ">
+											<f:validateRegex
+												pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+										</p:inputText>
+										<h:message for="email" errorClass="form-error" />
+									</div>
+									<div class="form-group">
+										<p:password id="password" required="true"
+											value="#{registrationBean.password}" label="Password"
+											match="confirmpassword" requiredMessage=""
+											styleClass="form-control " placeholder="Password *"
+											validatorMessage="Password should be between 6-20 characters and contains alphabets and numeric values">
+											<f:validateLength minimum="6" maximum="20"></f:validateLength>
+										</p:password>
+										<h:message styleClass="form-error" for="password" />
+									</div>
+									<div class="form-group">
+										<p:password placeholder="Confirm Password*" required="true"
+											requiredMessage="Please enter confirm password."
+											id="confirmpassword" styleClass="form-control"
+											value="#{registrationBean.password}" label="Confirm Password" />
+										<h:message for="confirmpassword" errorClass="form-error" />
+									</div>
+									<div class="form-group">
+										<p:inputText placeholder="Mobile Number" required="true"
+											requiredMessage="Please enter mobile number."
+											id="mobilenumber" styleClass="form-control"
+											value="#{registrationBean.webUserProfile.phoneNo}"
+											validatorMessage="Please enter valid mobile number">
+											<f:validateRegex pattern="^([\d]{10,12})?$" />
+										</p:inputText>
+										<h:message for="mobilenumber" errorClass="form-error" />
+									</div>
+									<p:messages for="userAlreadyExists" styleClass="form-error" />
+									<p:commandButton
+										action="#{registrationController.registerUser()}"
+										id="registerBtn" styleClass="btn btn-success btn-block"
+										value="Signup" update=":registrationForm">
+										<f:param name="page" value="#{param.page}" />
+									</p:commandButton>
+								</h:panelGroup>
+								<h:panelGroup rendered="#{registrationBean.twoFactorMailSent}">
+									One-Time Password Sent to mail. 
+										<div class="form-group">
+										<p:inputText required="true" id="otp"
+											requiredMessage="Please enter otp."
+											value="#{registrationBean.otp}"
+											validatorMessage="Enter valid otp" placeholder="OTP*"
+											styleClass="form-control">
+										</p:inputText>
+									</div>
+									<p:commandButton action="#{registrationController.submitOtp()}"
+										id="submitOtpBtn" styleClass="btn btn-success btn-block"
+										value="Signup" update=":registrationForm">
+										<f:param name="page" value="#{param.page}" />
+									</p:commandButton>
+								</h:panelGroup>
+								</fieldset>
+							</h:form>
+							<br />
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<hr />
+
+
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,120 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core" template="/home.xhtml">
+
+	<ui:define name="content">
+		<br />
+		<h:form id="adminForm">
+			<div class="container">
+				<h1 class="pb-3">Admin Dashboard</h1>
+				<h:inputText styleClass="form-control"
+					style="max-width: 340px; display: inline;"
+					value="#{adminBean.username}"></h:inputText>
+				<p:commandButton value="Search" id="searchBtn"
+					styleClass="btn btn-info shop ml-2"
+					update=":adminForm :permissionForm"
+					action="#{adminController.search()}" />
+				<div class="card mt-3">
+					<table class="table table-bordered">
+						<thead>
+							<tr>
+								<th scope="col">Crypto Name</th>
+								<th scope="col">Symbol</th>
+								<th scope="col">Bought Price</th>
+								<th scope="col">Current Price</th>
+							</tr>
+						</thead>
+						<tbody>
+							<ui:repeat value="#{adminBean.userPortfolio.stocks}" var="stock"
+								varStatus="stockStatus">
+								<tr>
+									<td>#{stock.stock}</td>
+									<td>#{stock.symbol}</td>
+									<td>#{stock.totalAmount}</td>
+									<td>#{stock.currentPrice}</td>
+								</tr>
+							</ui:repeat>
+						</tbody>
+					</table>
+				</div>
+			</div>
+
+		</h:form>
+		<div class="container">
+		<div class="row">
+			<div class="col-5 pl-10">
+				<h:form id="permissionForm">
+					<p:growl id="growl" showDetail="true" sticky="true" />
+					<div class="container mt-3">
+
+						<div class="col-3" style="display: inline-grid;">
+							<label class="pb-4">Trading Option:</label> <label class="pb-4">Buying
+								Option:</label> <label class="pb-4">Selling Option:</label>
+						</div>
+						<div class="col-1" style="display: inline-grid;">
+							<div class="form-group">
+								<p:selectBooleanButton id="trading"
+									value="#{permissionsBean.permission.tradingOption}"
+									onLabel="Yes" offLabel="No" onIcon="pi pi-check"
+									offIcon="pi pi-times" styleClass="form-control mt-2 mb-5"
+									style="width:80px">
+								</p:selectBooleanButton>
+								<br />
+								<ui:fragment
+									rendered="#{permissionsBean.permission.tradingOption}">
+									<p:selectBooleanButton id="buying"
+										value="#{permissionsBean.permission.buyingOption}"
+										onLabel="Yes" styleClass="form-control mb-5 mt-4" offLabel="No"
+										onIcon="pi pi-check" offIcon="pi pi-times" style="width:80px">
+									</p:selectBooleanButton>
+									<br />
+									<p:selectBooleanButton id="selling"
+										value="#{permissionsBean.permission.sellingOption}"
+										onLabel="Yes" styleClass="form-control" offLabel="No"
+										onIcon="pi pi-check" offIcon="pi pi-times" style="width:80px">
+									</p:selectBooleanButton>
+								</ui:fragment>
+							</div>
+						</div>
+						<div class="col-2 ml-5 pl-5">
+							<p:commandButton value="Submit" id="searchBtn"
+								styleClass="btn btn-info shop ml-5" update=":adminForm"
+								action="#{adminController.setPermissions()}" process="@this" />
+						</div>
+
+					</div>
+				</h:form>
+			</div>
+			<div class="col-5">
+				<h:form id="addMoneyForm">
+				<p:growl id="growl" showDetail="true" sticky="true" />
+					<div class="container mt-3">
+
+						<div class="col-3" style="display: inline-grid;">
+							<label class="pb-4">Add Money:</label>
+						</div>
+						<div class="col-5" style="display: inline-grid;">
+							<p:inputText required="true" id="money"
+								requiredMessage="Please enter money" value="#{addMoneyBean.amount}"
+								validatorMessage="Please enter valid amount"
+								styleClass="form-control ">
+							</p:inputText>
+							<br />
+						</div>
+					</div>
+					<div class="col-2 ml-5 pl-5">
+						<p:commandButton value="Submit" id="addbtn" process="@this"
+							styleClass="btn btn-info shop ml-5" update=":addMoneyForm"
+							action="#{adminController.addMoney()}" />
+					</div>
+				</h:form>
+			</div>
+		</div>
+		</div>
+		<hr />
+	</ui:define>
+
+</ui:composition>

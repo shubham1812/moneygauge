@@ -1,0 +1,71 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:common="http://java.sun.com/jsf/composite/components/common">
+
+	<!-- Navigation -->
+	<nav class="navbar navbar-expand-lg navbar-light fixed-top"
+		id="mainNav">
+		<div class="container">
+			<a class="navbar-brand" href="home"><h3>MoneyGauge</h3></a>
+			<button class="navbar-toggler navbar-toggler-right" type="button"
+				data-toggle="collapse" data-target="#navbarResponsive"
+				aria-controls="navbarResponsive" aria-expanded="false"
+				aria-label="Toggle navigation">
+				Menu <i class="fas fa-bars"></i>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarResponsive">
+				<ul class="navbar-nav ml-auto">
+					<li class="nav-item"><a class="nav-link" href="home">Home</a>
+					</li>
+					<li class="nav-item"><a class="nav-link" href="market">Stocks</a>
+					</li>
+					<li class="nav-item"><a class="nav-link" href="shop-cryptos">Cryptos</a>
+					</li>
+					<li class="nav-item"><a class="nav-link" href="analytics">Analytics</a>
+					</li>
+					<h:panelGroup rendered="#{!webUserBean.valid}">
+						<li class="nav-item"><a class="nav-link" href="signin">Login</a>
+						</li>
+						<li class="nav-item"><a class="nav-link" href="registration">Register</a>
+						</li>
+					</h:panelGroup>
+					<h:panelGroup rendered="#{webUserBean.valid}">
+						<h:form>
+							<li class="nav-item dropdown"><a
+								style="font-weight: 600; color: white; font-size: initial;"
+								class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
+								role="button" data-toggle="dropdown" aria-haspopup="true"
+								aria-expanded="false"> Hello #{webUserBean.userName} </a>
+								<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+									<a class="dropdown-item" href="userProfile">User Profile</a>
+									<a class="dropdown-item" href="trollbox">Messaging</a>
+									<div class="dropdown-divider"></div>
+									<p:commandLink value="Sign Out" styleClass="dropdown-item"
+										action="#{signinController.signout()}">Logout</p:commandLink>
+
+								</div></li>
+						</h:form>
+					</h:panelGroup>
+					<h:panelGroup rendered="#{customizableTemplateBean.nightMode}">
+						<li class="nav-item"><h:form>
+								<p:commandLink value="Light Mode" styleClass="nav-link"
+									style="color: white; padding: 10px 20px;color: #fff; font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 12px;"
+									action="#{customizableTemplateController.startNewMode()}">Light Mode</p:commandLink>
+							</h:form></li>
+					</h:panelGroup>
+					<h:panelGroup rendered="#{!customizableTemplateBean.nightMode}">
+						<li class="nav-item"><h:form>
+								<p:commandLink value="Dark Mode" styleClass="nav-link"
+									style="color: white; padding: 10px 20px;color: #fff; font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 12px;"
+									action="#{customizableTemplateController.startNewMode()}">Dark Mode</p:commandLink>
+							</h:form></li>
+					</h:panelGroup>
+				</ul>
+			</div>
+		</div>
+	</nav>
+</ui:composition>

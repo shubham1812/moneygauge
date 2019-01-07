@@ -1,0 +1,356 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core" template="/home.xhtml">
+
+	<ui:define name="content">
+		<header class="masthead"
+			style="background-image: url(/img/investing.jpg);">
+			<div class="overlay"></div>
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-8 col-md-10 mx-auto">
+						<div class="site-heading">
+							<h1>User Profile</h1>
+							<br />
+						</div>
+					</div>
+				</div>
+			</div>
+		</header>
+		<br></br>
+
+		<div class="container">
+			<div class="row">
+				<div class="col-6">
+					<div class="card h-100 userprofile-card">
+						<h:form id="userInfoForm">
+							<div class="card-body">
+								<h2 class="card-title text-center">User Information</h2>
+								<br /> <br />
+								<div class="panel-body">
+									<div class="col-4" style="display: inline-grid;">
+										<label class="font-weight-light pr-3 pt-2"
+											style="font-size: 20px;"><h5>Name:</h5></label> <label
+											class="font-weight-light pr-3 pt-4 pb-2"
+											style="font-size: 20px;"><h5>Email:</h5></label> <label
+											class="font-weight-light pr-3 pt-4" style="font-size: 20px;"><h5>Phone
+												No.:</h5></label> <label class="font-weight-light pr-3 pt-4"
+											style="font-size: 20px;"><h5>Net Worth:</h5></label>
+											<label class="font-weight-light pr-3 pt-4"
+											style="font-size: 20px;"><h5>Add money:</h5></label>
+									</div>
+									<div class="col-7" style="display: inline-grid;">
+										<fieldset>
+											<div>
+												<div class="form-group" style="margin-bottom: 20px;">
+													<h:outputText style="font-size: 30px;"
+														value="#{userProfileBean.name}"></h:outputText>
+												</div>
+											</div>
+											<div>
+												<div class="form-group" style="margin-bottom: 30px;">
+													<h:outputText style="font-size: 30px;"
+														value="#{userProfileBean.email}"></h:outputText>
+												</div>
+											</div>
+											<div>
+												<div class="form-group" style="margin-bottom: 30px;">
+													<h:outputText style="font-size: 30px;"
+														value="#{userProfileBean.phoneNo}"></h:outputText>
+												</div>
+											</div>
+											<div>
+												<div class="form-group">
+													<h5>
+														<h:outputText style="font-size: 30px;"
+															value="#{userProfileBean.netWorth}">
+															<f:convertNumber currencySymbol="$" type="currency" />
+														</h:outputText>
+													</h5>
+												</div>
+											</div>
+											<div id="paypal-button-container"></div>
+											<script src="https://www.paypalobjects.com/api/checkout.js"></script>
+										</fieldset>
+									</div>
+
+								</div>
+
+								<!-- <div class="form-group">
+									<label class="col-sm-8 col-form-label">Name:
+										#{userProfileBean.name}</label>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-8 col-form-label">Email:
+										#{userProfileBean.email}</label>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-8 col-form-label">Phone no:
+										#{userProfileBean.phoneNo}</label>
+								</div> -->
+
+							</div>
+						</h:form>
+						<!--
+                <div class="card-footer">
+                    <small class="text-muted">Last updated 3 mins ago</small>
+                </div>
+-->
+					</div>
+				</div>
+				<div class="col-6">
+					<div class="card h-100 userprofile-card">
+						<div class="card-body">
+							<h2 class="card-title text-center">Value/Stock</h2>
+							<div id="chart-container"
+								style="padding-left: 2%; width: 400px; height: 400px"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<br></br>
+		<center>
+		<div class="col-10">
+		<h2 class="text-center">My Stocks</h2>
+		<div class="card background-card">
+			<br></br>
+			<div class="container">
+				<div class="card userprofile-card mt-3"
+					style="height: 300px; overflow-y: scroll;">
+					<h:form id="stockForm">
+						<table class="table table-borderless table-striped">
+							<thead>
+								<tr>
+									<th scope="col">Crypto Name</th>
+									<th scope="col">Symbol</th>
+									<th scope="col">Bought Price</th>
+									<th scope="col">Current Price</th>
+									<th scope="col">Total Amount</th>
+									<th scope="col">Gain/Loss</th>
+									<th scope="col">Change %</th>
+								</tr>
+							</thead>
+							<tbody>
+								<ui:repeat value="#{webUserBean.userPortfolio.stocks}"
+									var="stock" varStatus="stockStatus">
+									<tr>
+										<td>#{stock.stock}</td>
+										<td>#{stock.symbol}</td>
+										<td>#{stock.price}</td>
+										<td>#{stock.currentPrice}</td>
+										<td>#{stock.totalAmount}</td>
+										<ui:fragment rendered="#{stock.symbol eq 'USD'}">
+											<td>-</td>
+											<td>-</td>
+										</ui:fragment>
+										<ui:fragment
+											rendered="#{stock.symbol ne 'USD' and stock.profit}">
+											<td style="color: green;">#{stock.changeAmount}</td>
+											<td style="color: green;"><h:outputText
+													value="#{stock.changePercentage}">
+													<f:convertNumber pattern="#0.00" />
+												</h:outputText> %</td>
+										</ui:fragment>
+										<ui:fragment
+											rendered="#{stock.symbol ne 'USD' and !stock.profit}">
+											<td style="color: red;">#{stock.changeAmount}</td>
+											<td style="color: red;"><h:outputText
+													value="#{stock.changePercentage}">
+													<f:convertNumber pattern="#0.00" />
+												</h:outputText> %</td>
+										</ui:fragment>
+									</tr>
+								</ui:repeat>
+							</tbody>
+						</table>
+					</h:form>
+				</div>
+			</div>
+		</div>
+		<br></br>
+		<h2 class="text-center">Orders</h2>
+		<div class="card background-card">
+			<br></br>
+			<div class="container">
+				<div class="card userprofile-card mt-3"
+					style="height: 400px; overflow-y: scroll;">
+					<h:form id="tableFormq">
+						<table class="table table-borderless table-striped">
+							<thead>
+								<tr>
+									<th scope="col">Date</th>
+									<th scope="col">Order Type</th>
+									<th scope="col">Crypto Name</th>
+									<th scope="col">Symbol</th>
+									<th scope="col">Bought Price</th>
+									<th scope="col">Volume</th>
+									<th scope="col">Total Amount</th>
+								</tr>
+							</thead>
+							<tbody>
+								<ui:repeat value="#{userProfileBean.orders}" var="stock"
+									varStatus="stockStatus">
+									<tr>
+										<td><h:outputText value="#{stock.creationDateTime}">
+												<f:convertDateTime pattern="MM.dd.yyyy" />
+											</h:outputText></td>
+										<td><h:outputText value="#{stock.orderType}"
+												style="color: #{(stock.orderType eq 'SELL')? 'red' : 'green'}"></h:outputText>
+										</td>
+										<td>#{stock.stock}</td>
+										<td>#{stock.symbol}</td>
+										<td>#{stock.price}</td>
+										<td>#{stock.volume}</td>
+										<td>#{stock.totalAmount}</td>
+									</tr>
+								</ui:repeat>
+							</tbody>
+						</table>
+					</h:form>
+				</div>
+			</div>
+		</div>
+		</div>
+		</center>
+		<br></br>
+
+		<script>
+		
+		
+		anychart.onDocumentReady(function() {
+			var users = [
+				  <ui:repeat value="#{webUserBean.userPortfolio.stocks}" var="user" varStatus="loop">
+				  {x: "#{user.stock}", value: "#{user.totalAmount}"}#{loop.last ? '' : ','}
+				  </ui:repeat>
+				];
+			
+			  // create the chart
+			  var chart = anychart.pie();
+
+			  // set the chart title
+
+			  // add the data
+			  chart.data(users);
+
+			  // display the chart in the container
+			  chart.fill("aquastyle");
+			  chart.container('chart-container');
+			  chart.draw();
+
+			});
+		
+		
+		</script>
+		<script>
+//Render the PayPal button
+
+paypal.Button.render({
+
+						// Set your environment
+
+						env : 'sandbox', // sandbox | production
+
+
+
+						// Specify the style of the button
+
+						style : {
+
+							layout : 'vertical', // horizontal | vertical
+
+							size : 'medium', // medium | large | responsive
+
+							shape : 'rect', // pill | rect
+
+							color : 'gold' // gold | blue | silver | white | black
+
+						},
+
+
+						// Specify allowed and disallowed funding sources
+
+						//
+
+						// Options:
+
+						// - paypal.FUNDING.CARD
+
+						// - paypal.FUNDING.CREDIT
+
+						// - paypal.FUNDING.ELV
+
+						funding : {
+
+							allowed : [ paypal.FUNDING.CARD,
+
+									paypal.FUNDING.CREDIT ],
+
+							disallowed : []
+
+						},
+
+
+
+						// PayPal Client IDs - replace with your own
+
+						// Create a PayPal app: https://developer.paypal.com/developer/applications/create
+
+						client : {
+
+							sandbox : 'ASC33kyUHVNdo26fxri-UOrD47RwekSvoaLRgeUnLw1cyCBunbYhRtqVdZD7Z27bTxVco1I9SK2H2cXM',
+
+							production : 'AcRQ-ptX4rXtmUs9Y2NmsAcTe-wHko_tS7qXVxiV6yAyix29jQXYDFpHGk8RcWt-22Mm2NQ93H_mQTqn'
+
+						},
+
+
+
+						payment : function(data, actions) {
+
+							return actions.payment.create({
+
+								payment : {
+
+									transactions : [ {
+
+										amount : {
+
+											total : '1.00',
+
+											currency : 'USD'
+
+										}
+
+									} ]
+
+								}
+
+							});
+
+						},
+
+
+
+						onAuthorize : function(data, actions) {
+
+							return actions.payment.execute().then(function() {
+
+								alert("Payment Complete!") 
+
+										
+
+							});
+
+						}
+
+					}, '#paypal-button-container');</script>
+
+
+		<br></br>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+	<session-factory>
+
+		<!-- For Localhost -->
+		<!-- <property name="connection.url">jdbc:mysql://localhost:3306/moneygauge</property> -->
+		<property name="connection.url">jdbc:mysql://18.219.18.23:3306/bitchart</property>
+		<property name="connection.driver_class">com.mysql.jdbc.Driver</property>
+		<property name="connection.username">root</property>
+		<property name="connection.password"></property>
+		<property name="connection.pool_size">50</property>
+		<property name="dialect">org.hibernate.dialect.MySQL5Dialect</property>
+		<property name="cache.use_second_leusevel_cache">false</property>
+		<property name="hibernate.show_sql">false</property>
+
+		<!-- DB schema will be updated if needed -->
+		<mapping class="moneyguage.Model.Bean.DbUserAccess" />
+		<mapping class="moneyguage.Model.Bean.DbWebUserProfile" />
+		<mapping class="moneyguage.Model.Bean.DbPortfolioOrders" />
+		<mapping class="moneyguage.Model.Bean.DbMarket" />
+		<mapping class="moneyguage.Model.Bean.DbUserPortfolio" />
+		<mapping class="moneyguage.Model.Bean.DbUserPermission" />
+	</session-factory>
+</hibernate-configuration>

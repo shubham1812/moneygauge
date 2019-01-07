@@ -1,0 +1,94 @@
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:700);
+#cssmenu {
+  background: #D3D3D3
+  width: auto;
+  border-radius:5px;
+}
+//blue #003366;
+#cssmenu ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  line-height: 1;
+  display: block;
+  zoom: 1;
+}
+#cssmenu ul:after {
+  content: " ";
+  display: block;
+  font-size: 0;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
+#cssmenu ul li {
+  display: inline-block;
+  padding: 2.5% 2.5% 2.5% 2.5%;
+  margin: 0;
+}
+#cssmenu.align-right ul li {
+  float: right;
+}
+#cssmenu.align-center ul {
+  text-align: center;
+}
+#cssmenu ul li a option {
+  color: #003366;
+  text-decoration: none;
+  display: block;
+  padding: 0px 0px 0px 0px;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 600;
+  //text-transform: uppercase;
+  font-size: 1.2vw;
+  position: relative;
+  -webkit-transition: color .25s;
+  -moz-transition: color .25s;
+  -ms-transition: color .25s;
+  -o-transition: color .25s;
+  transition: color .25s;
+}
+#cssmenu ul li a option:hover {
+  cursor:pointer;
+  color: #d3d3d3;
+}
+#cssmenu ul li a option:hover:before {
+  width: 100%;
+}
+
+#cssmenu ul li a option:after {
+  content: "";
+  display: block;
+  position: absolute;
+  right: -20%;
+  top: -10%;
+  height: 1.85vw;
+  width: 1px;
+  background: #ffffff;
+  opacity: .5;
+}
+#cssmenu ul li a option:before {
+  content: "";
+  display: block;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 3px;
+  width: 0;
+  background: #d3d3d3;
+  -webkit-transition: width .25s;
+  -moz-transition: width .25s;
+  -ms-transition: width .25s;
+  -o-transition: width .25s;
+  transition: width .25s;
+}
+
+#cssmenu ul li.active a {
+  color: #d3d3d3;
+}
+#cssmenu ul li.active a:before {
+  width: 100%;
+}
+
+
+
